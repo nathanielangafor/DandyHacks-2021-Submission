@@ -72,7 +72,7 @@ def locationTable():
     conn = sqlite3.connect("database.db")
 
     c = conn.cursor()
-    c.execute('CREATE TABLE IF NOT EXISTS Locations (id INTEGER, user TEXT, longitude REAL, latitude REAL, image TEXT, comment TEXT, type INTEGER, title TEXT, currentUser TEXT)')
+    c.execute('CREATE TABLE IF NOT EXISTS Locations (id INTEGER, user TEXT, longitude REAL, latitude REAL, image TEXT, comment TEXT, type INTEGER, title TEXT, currentUser TEXT, points INTEGER)')
 
 @app.route('/update/', methods=['GET', 'POST'])
 def update():
@@ -122,7 +122,7 @@ def insertLocation():
         image = get_blob_link("dbb_1", "{}.png".format(fileName))
 
         c = conn.cursor()
-        c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, request.form.get('user'), float(request.form.get('longitude')), float(request.form.get('latitude')), fileName + '.png', request.form.get('comment'), request.form.get('type'), request.form.get('title'), ''))
+        c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, request.form.get('user'), float(request.form.get('longitude')), float(request.form.get('latitude')), fileName + '.png', request.form.get('comment'), request.form.get('type'), request.form.get('title'), '', int(request.form.get('title')) ))
         conn.commit()
 
         os.remove(fileName + '.png')
