@@ -21,7 +21,7 @@ def readOne(table, criteria, value):
     conn = sqlite3.connect("database.db")
 
     c = conn.cursor()
-    c.execute('SELECT * FROM {} WHERE {}={}'.format(table, criteria, value),)
+    c.execute('SELECT * FROM {} WHERE {}=(?)'.format(table, criteria), (value),)
     data = c.fetchone()
     return data
 
