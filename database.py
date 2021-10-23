@@ -1,8 +1,60 @@
 import json
 import sqlite3
+import base64
+import random
+import string
+from PIL import Image
+from io import BytesIO
+from google.cloud import storage
+import os
 from flask import Flask, request
 app = Flask(__name__)
 app.secret_key = b"Da ya biezlikiy patamy shto u menya nie litso"
+
+def readOne(criteria, value):
+    conn = sqlite3.connect(r"/Users/n8/Desktop/DandyHacks/database.db")
+
+    c = conn.cursor()
+    c.execute('SELECT * FROM {} WHERE {}={}'.format(criteria, value))
+    data = c.fetchone()
+    return data
+
+def orig_read(table):
+    conn = sqlite3.connect(r"/Users/n8/Desktop/DandyHacks/database.db")
+
+    c = conn.cursor()
+    c.execute('SELECT * FROM {}'.format(table))
+    data = c.fetchall()
+    return data
+
+def get_blob_link(bucket_name, source_file_name):
+
+    storage_client = storage.Client("Dandy Bois")
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(source_file_name)
+
+    blob.make_public()
+    url = blob.public_url
+
+    return url
+
+
+def upload_blob(bucket_name, source_file_name, destination_blob_name):
+
+    storage_client = storage.Client("Dandy Bois")
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    blob.upload_from_filename(source_file_name)
+
+    print(
+        "File {} uploaded to {}.".format(
+            source_file_name, destination_blob_name
+        )
+    )
+
+def randomString(length):
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
 def userTable():
     conn = sqlite3.connect(r"/Users/n8/Desktop/DandyHacks/database.db")
@@ -14,7 +66,7 @@ def locationTable():
     conn = sqlite3.connect(r"/Users/n8/Desktop/DandyHacks/database.db")
 
     c = conn.cursor()
-    c.execute('CREATE TABLE IF NOT EXISTS Locations (user TEXT, longitude TEXT, latitude TEXT, image TEXT, comment TEXT, type INTEGER, title TEXT)')
+    c.execute('CREATE TABLE IF NOT EXISTS Locations (id INTEGER, user TEXT, longitude REAL, latitude REAL, image TEXT, comment TEXT, type INTEGER, title TEXT, currentUser TEXT)')
 
 
 @app.route('/insertUser/', methods=['GET', 'POST'])
@@ -33,7 +85,7 @@ def insertUser():
 
         c = conn.cursor()
         c.execute("INSERT INTO Users (email, username, password, points, achievements) VALUES (?, ?, ?, ?, ?)", (request.form.get('email'), request.form.get('username'), request.form.get('password'), points, achievements,))
-        conn.commit()
+        conn.commit()   
 
         return 'True'
 
@@ -42,9 +94,18 @@ def insertLocation():
     if request.method == 'POST':
         conn = sqlite3.connect(r"/Users/n8/Desktop/DandyHacks/database.db")
 
+        fileName = randomString(9)
+        image = Image.open(BytesIO(base64.b64decode(request.form.get('image'))))
+        image.save('{}.png'.format(fileName), 'PNG')
+
+        upload_blob("dbb_1", '{}.png'.format(fileName), '{}.png'.format(fileName))
+        image = get_blob_link("dbb_1", "{}.png".format(fileName))
+
         c = conn.cursor()
-        c.execute("INSERT INTO Locations (user, longitude, latitude, image, comment, type, title) VALUES (?, ?, ?, ?, ?, ?, ?)", (request.form.get('user'), request.form.get('longitude'), request.form.get('latitude'), request.form.get('image'), request.form.get('comment'), request.form.get('type'), request.form.get('title'),))
+        c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, request.form.get('user'), float(request.form.get('longitude')), float(request.form.get('latitude')), fileName + '.png', request.form.get('comment'), request.form.get('type'), request.form.get('title'), ''))
         conn.commit()
+
+        os.remove(fileName + '.png')
 
         return 'True'
 
@@ -62,12 +123,13 @@ def delete():
 @app.route('/read/', methods=['GET', 'POST'])
 def read():
     if request.method == 'POST':
-        conn = sqlite3.connect(r"/Users/n8/Desktop/DandyHacks/database.db")
+        return str(orig_read(request.form.get('table')))
 
-        c = conn.cursor()
-        c.execute('SELECT * FROM {}'.format(request.form.get('table')))
-        data = c.fetchall()
-        return str(data)
+
+@app.route('/readOne/', methods=['GET', 'POST'])
+def readOne():
+    if request.method == 'POST':
+        return str(readOne(request.form.get('table'), request.form.get('criteria'), request.form.get('value')))
 
 
 @app.route('/login/', methods=['GET', 'POST'])
@@ -97,9 +159,7 @@ def test():
 userTable()
 locationTable()
 
+
 if __name__ == "__main__":
     app.run(debug=False)
 
-
-# Types
-# Cleanup
