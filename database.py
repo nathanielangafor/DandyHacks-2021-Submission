@@ -124,6 +124,9 @@ def insertLocation():
         parsed = json.loads((request.data).decode('utf-8')) 
         
         print(parsed)
+        print(parsed['user'])
+        print(parsed[0])
+        
 
         c = conn.cursor()
         c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, parsed[0]['user'], float(parsed[0]['longitude']), float(parsed[0]['latitude']), fileName + '.png', parsed[0]['comment'], parsed[0]['type'], parsed[0]['title'], '', int(parsed[0]['title']) ))
