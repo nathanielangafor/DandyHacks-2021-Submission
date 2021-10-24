@@ -152,7 +152,7 @@ def read():
         
         print(parsed)
         
-        return orig_read(parsed['table'])
+        return str(orig_read(parsed['table']))
 
 
 @app.route('/readOne/', methods=['GET', 'POST'])
