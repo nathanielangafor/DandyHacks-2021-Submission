@@ -120,9 +120,11 @@ def insertLocation():
 
         upload_blob("dbb_1", '{}.png'.format(fileName), '{}.png'.format(fileName))
         image = get_blob_link("dbb_1", "{}.png".format(fileName))
+        
+        parsed = json.loads((request.data).decode('utf-8')) 
 
         c = conn.cursor()
-        c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, request.form.get('user'), float(request.form.get('longitude')), float(request.form.get('latitude')), fileName + '.png', request.form.get('comment'), request.form.get('type'), request.form.get('title'), '', int(request.form.get('title')) ))
+        c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, parsed['locations']['user'], float(parsed['locations']['longitude']), float(parsed['locations']['latitude']), fileName + '.png', parsed['locations']['comment'], parsed['locations']['type'], parsed['locations']['title'], '', int(parsed['locations']['title']) ))
         conn.commit()
 
         os.remove(fileName + '.png')
