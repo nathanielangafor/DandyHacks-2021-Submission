@@ -126,7 +126,8 @@ def insertLocation():
         print(parsed)
 
         c = conn.cursor()
-        c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, parsed['user'], float(parsed['longitude']), float(parsed['latitude']), "", parsed['comment'], parsed['type'], parsed['title'], '', int(parsed['points']) ))
+        c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ldef read
+        ('Locations')) + 1, parsed['user'], float(parsed['longitude']), float(parsed['latitude']), "", parsed['comment'], parsed['type'], parsed['title'], '', int(parsed['points']) ))
         conn.commit()
 
 #         os.remove(fileName + '.png')
@@ -147,7 +148,12 @@ def delete():
 @app.route('/read/', methods=['GET', 'POST'])
 def read():
     if request.method == 'POST':
-        return str(orig_read(request.form.get('table')))
+        
+        parsed = json.loads((request.data).decode('utf-8'))
+        
+        print(parsed)
+        
+        return orig_read(parsed['table'])
 
 
 @app.route('/readOne/', methods=['GET', 'POST'])
