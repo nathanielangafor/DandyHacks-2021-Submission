@@ -129,7 +129,7 @@ def insertLocation():
         c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, parsed['user'], float(parsed['longitude']), float(parsed['latitude']), "", parsed['comment'], parsed['type'], parsed['title'], '', int(parsed['points']) ))
         conn.commit()
 
-        os.remove(fileName + '.png')
+#         os.remove(fileName + '.png')
 
         return 'True'
 
