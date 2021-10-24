@@ -151,7 +151,7 @@ def readOne1():
     if request.method == 'POST':
         
         parsed = json.loads((request.data).decode('utf-8')) 
-            
+        print(parsed)
         return str(readOne(parsed['form']['table'], parsed['form']['criteria'], parsed['form']['value']))
 
 
