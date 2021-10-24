@@ -114,12 +114,12 @@ def insertLocation():
     if request.method == 'POST':
         conn = sqlite3.connect("database.db")
 
-        fileName = randomString(9)
-        image = Image.open(BytesIO(base64.b64decode(request.form.get('image'))))
-        image.save('{}.png'.format(fileName), 'PNG')
+#         fileName = randomString(9)
+#         image = Image.open(BytesIO(base64.b64decode(request.form.get('image'))))
+#         image.save('{}.png'.format(fileName), 'PNG')
 
-        upload_blob("dbb_1", '{}.png'.format(fileName), '{}.png'.format(fileName))
-        image = get_blob_link("dbb_1", "{}.png".format(fileName))
+#         upload_blob("dbb_1", '{}.png'.format(fileName), '{}.png'.format(fileName))
+#         image = get_blob_link("dbb_1", "{}.png".format(fileName))
         
         parsed = json.loads((request.data).decode('utf-8')) 
         
