@@ -152,7 +152,7 @@ def readOne1():
         
         parsed = json.loads((request.data).decode('utf-8')) 
         print(parsed)
-        data = json.dumps(str(readOne(parsed['user']['table'], parsed['user']['criteria'], parsed['user']['value'])))
+        data = json.dumps("{data: " + str(readOne(parsed['user']['table'], parsed['user']['criteria'], parsed['user']['value'])) + "}")
         print(data)
         return data
 
