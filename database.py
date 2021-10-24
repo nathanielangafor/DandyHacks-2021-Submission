@@ -149,7 +149,10 @@ def read():
 @app.route('/readOne/', methods=['GET', 'POST'])
 def readOne1():
     if request.method == 'POST':
-        return str(readOne(request.form.get('table'), request.form.get('criteria'), request.form.get('value')))
+        
+        parsed = json.loads((request.data).decode('utf-8')) 
+            
+        return str(readOne(parsed['form']['table'], parsed['form']['criteria'], parsed['form']['value']))
 
 
 @app.route('/login/', methods=['GET', 'POST'])
