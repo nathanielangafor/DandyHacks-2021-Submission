@@ -144,9 +144,11 @@ def insertLocation():
 def delete():
     if request.method == 'POST':
         conn = sqlite3.connect("database.db")
+        
+        parsed = json.loads((request.data).decode('utf-8')) 
 
         c = conn.cursor()
-        c.execute('DELETE FROM {} WHERE {}=(?)'.format(request.form.get('table'), request.form.get('criteria')), (request.form.get('identifier'),))
+        c.execute('DELETE FROM {} WHERE {}=(?)'.format(parsed['table'], parsed['criteria']), (parsed['identifier'],))
         conn.commit()
 
         return 'True'
