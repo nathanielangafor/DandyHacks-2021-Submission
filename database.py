@@ -115,21 +115,28 @@ def insertLocation():
         conn = sqlite3.connect("database.db")
         
         parsed = json.loads((request.data).decode('utf-8')) 
+        
+        try:
 
-        fileName = randomString(9)
-        image = Image.open(BytesIO(base64.b64decode(parsed['image'])))
-        image.save('{}.png'.format(fileName), 'PNG')
+            fileName = randomString(9)
+            image = Image.open(BytesIO(base64.b64decode(parsed['image'])))
+            image.save('{}.png'.format(fileName), 'PNG')
 
-        upload_blob("dbb_1", '{}.png'.format(fileName), '{}.png'.format(fileName))
-        image = get_blob_link("dbb_1", "{}.png".format(fileName))
-                
-        print(image)
+            upload_blob("dbb_1", '{}.png'.format(fileName), '{}.png'.format(fileName))
+            image = get_blob_link("dbb_1", "{}.png".format(fileName))
 
-        c = conn.cursor()
-        c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, parsed['user'], float(parsed['longitude']), float(parsed['latitude']), image, parsed['comment'], parsed['type'], parsed['title'], '', int(parsed['points'])))
-        conn.commit()
+            print(image)
 
-        os.remove(fileName + '.png')
+            c = conn.cursor()
+            c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, parsed['user'], float(parsed['longitude']), float(parsed['latitude']), image, parsed['comment'], parsed['type'], parsed['title'], '', int(parsed['points'])))
+            conn.commit()
+
+            os.remove(fileName + '.png')
+            
+        except:
+            c = conn.cursor()
+            c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, parsed['user'], float(parsed['longitude']), float(parsed['latitude']), parsed['image'], parsed['comment'], parsed['type'], parsed['title'], '', int(parsed['points'])))
+            conn.commit()
 
         return 'True'
 
