@@ -31,7 +31,7 @@ def orig_read(table):
     c = conn.cursor()
     c.execute('SELECT * FROM {}'.format(table))
     data = c.fetchall()
-    return data
+    return json.dumps(data)
 
 def get_blob_link(bucket_name, source_file_name):
 
