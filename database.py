@@ -125,11 +125,11 @@ def insertLocation():
         
         print(parsed)
 
-        c = conn.cursor()
-        c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, parsed['locations']['user'], float(parsed['locations']['longitude']), float(parsed['locations']['latitude']), fileName + '.png', parsed['locations']['comment'], parsed['locations']['type'], parsed['locations']['title'], '', int(parsed['locations']['title']) ))
-        conn.commit()
+#         c = conn.cursor()
+#         c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, parsed['locations']['user'], float(parsed['locations']['longitude']), float(parsed['locations']['latitude']), fileName + '.png', parsed['locations']['comment'], parsed['locations']['type'], parsed['locations']['title'], '', int(parsed['locations']['title']) ))
+#         conn.commit()
 
-        os.remove(fileName + '.png')
+#         os.remove(fileName + '.png')
 
         return 'True'
 
