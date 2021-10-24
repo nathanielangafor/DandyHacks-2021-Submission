@@ -122,6 +122,8 @@ def insertLocation():
         image = get_blob_link("dbb_1", "{}.png".format(fileName))
         
         parsed = json.loads((request.data).decode('utf-8')) 
+        
+        print(parsed)
 
         c = conn.cursor()
         c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, parsed['locations']['user'], float(parsed['locations']['longitude']), float(parsed['locations']['latitude']), fileName + '.png', parsed['locations']['comment'], parsed['locations']['type'], parsed['locations']['title'], '', int(parsed['locations']['title']) ))
