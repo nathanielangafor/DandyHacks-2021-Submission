@@ -23,7 +23,7 @@ def readOne(table, criteria, value):
     c = conn.cursor()
     c.execute('SELECT * FROM {} WHERE {}=(?)'.format(table, criteria), (value,))
     data = c.fetchone()
-    return data
+    return json.dumps(data)
 
 def orig_read(table):
     conn = sqlite3.connect("database.db")
@@ -151,9 +151,8 @@ def readOne1():
     if request.method == 'POST':
         
         parsed = json.loads((request.data).decode('utf-8')) 
-        print(parsed)
-        data = json.dumps("{data: " + str(readOne(parsed['user']['table'], parsed['user']['criteria'], parsed['user']['value'])) + "}")
-        print(data)
+        data = str(readOne(parsed['user']['table'], parsed['user']['criteria'], parsed['user']['value']))
+
         return data
 
 
