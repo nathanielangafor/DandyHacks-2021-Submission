@@ -152,7 +152,9 @@ def readOne1():
         
         parsed = json.loads((request.data).decode('utf-8')) 
         print(parsed)
-        return json.dumps(str(readOne(parsed['user']['table'], parsed['user']['criteria'], parsed['user']['value'])))
+        data = json.dumps(str(readOne(parsed['user']['table'], parsed['user']['criteria'], parsed['user']['value'])))
+        print(data)
+        return data
 
 
 @app.route('/login/', methods=['GET', 'POST'])
