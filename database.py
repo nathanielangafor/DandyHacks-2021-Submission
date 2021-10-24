@@ -15,7 +15,7 @@ from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 import os
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/home/nangafor/Dandy-2021-Backend/ptxOV'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/home/nangafor/Dandy-2021-Backend/engaged-diode-329906-957b934a14a8.json'
 
 def readOne(table, criteria, value):
     conn = sqlite3.connect("database.db")
