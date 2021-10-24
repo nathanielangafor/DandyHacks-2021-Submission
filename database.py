@@ -104,7 +104,7 @@ def insertUser():
         points = 0
 
         c = conn.cursor()
-        c.execute("INSERT INTO Users (email, username, password, points, achievements) VALUES (?, ?, ?, ?, ?)", (request.form.get('email'), request.form.get('username'), request.form.get('password'), points, str(achievements),))
+        c.execute("INSERT INTO Locations (id, user, longitude, latitude, image, comment, type, title, currentUser, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (len(orig_read('Locations')) + 1, parsed['user'], float(parsed['longitude']), float(parsed['latitude']), "", parsed['comment'], parsed['type'], parsed['title'], '', int(parsed['points']) ))
         conn.commit()   
 
         return 'True'
