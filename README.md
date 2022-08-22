@@ -1,5 +1,5 @@
 
-<p align="center"> <img src="Project Elements/Simple_Email_Beacon.png"/> </p>
+<p align="center"> <img src="Project Elements/DandyHacks_2021_Backend_API.png"/> </p>
 
 <hr>
 <br/>
